@@ -4,146 +4,132 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MILLIONS — ARCHIVE</title>
+<title>MILLIONS</title>
 
 <style>
+:root {
+  --background: #190008;
+  --pink: #E8B3C7;
+}
+
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  background: #190008;
-  color: #003cff;
+  background: var(--background);
+  color: var(--pink);
   font-family: Helvetica, Arial, sans-serif;
-  font-size: 13px;
+  font-size: 14px;
 }
 
-header {
-  padding: 18px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #003cff;
-  position: sticky;
-  top: 0;
-  background: #190008;
-  z-index: 100;
-}
-
-header a {
-  color: #003cff;
+a {
+  color: var(--pink);
   text-decoration: none;
 }
 
+a:hover {
+  text-decoration: underline;
+}
+
+/* TOP HEADER */
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--pink);
+}
+
 .logo {
-  font-size: 22px;
-  letter-spacing: -1px;
+  font-size: 24px;
   font-weight: bold;
+  letter-spacing: -1px;
 }
 
 nav {
   display: flex;
-  gap: 18px;
+  gap: 22px;
+  align-items: center;
 }
 
-.intro {
-  padding: 14px 18px;
-  border-bottom: 1px solid #003cff;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-a {
-  color: #003cff;
-}
+/* IMAGE COLLECTION */
 
 .archive {
-  padding: 16px 12px;
   columns: 3 220px;
-  column-gap: 12px;
+  column-gap: 30px;
+  padding: 20px;
+  min-height: 450px;
 }
 
-.post {
-  break-inside: avoid;
-  position: relative;
-  margin: 0 0 15px;
-  padding: 3px;
+.photo {
   display: inline-block;
   width: 100%;
+  margin: 0 0 30px;
+  break-inside: avoid;
+  position: relative;
 }
 
-.post:nth-child(5n+1) {
-  transform: rotate(-1deg);
-}
-
-.post:nth-child(5n+2) {
-  transform: rotate(0.7deg);
-  margin-bottom: 3px;
-}
-
-.post:nth-child(5n+3) {
-  transform: rotate(-0.4deg);
-}
-
-.post:nth-child(7n+1) {
-  width: 88%;
-  margin-left: 6%;
-}
-
-.post img {
+.photo img {
   display: block;
   width: 100%;
   height: auto;
-  cursor: zoom-in;
-}
-
-.post img:hover {
-  outline: 1px solid #003cff;
+  border: 1px solid var(--pink);
+  cursor: pointer;
 }
 
 .caption {
-  font-size: 10px;
-  padding-top: 4px;
+  font-size: 12px;
+  margin-top: 5px;
+  color: var(--pink);
 }
 
-footer {
-  border-top: 1px solid #003cff;
-  padding: 20px;
-  text-align: center;
-  margin-top: 30px;
-}
+/* IMAGE VIEWER */
 
-/* IMAGE ENLARGEMENT */
-
-#viewer {
+.viewer {
   display: none;
   position: fixed;
+  z-index: 100;
   inset: 0;
-  background: rgba(0,0,0,0.94);
-  z-index: 200;
-  align-items: center;
+  background: rgba(10, 0, 5, 0.95);
   justify-content: center;
+  align-items: center;
   padding: 30px;
-  cursor: zoom-out;
+  cursor: pointer;
 }
 
-#viewer img {
+.viewer img {
   max-width: 95%;
   max-height: 90vh;
   object-fit: contain;
 }
 
+.viewer.active {
+  display: flex;
+}
+
+/* FOOTER */
+
+footer {
+  border-top: 1px solid var(--pink);
+  text-align: center;
+  padding: 22px;
+  min-height: 160px;
+  line-height: 2;
+  color: var(--pink);
+}
+
 @media (max-width: 600px) {
   .archive {
-    columns: 2 130px;
-    column-gap: 6px;
-    padding: 8px;
+    columns: 2 140px;
+    column-gap: 14px;
+    padding: 12px;
   }
 
   header {
-    padding: 12px;
+    padding: 15px 12px;
   }
 }
 </style>
@@ -152,35 +138,25 @@ footer {
 <body>
 
 <header>
-  <a class="logo" href="#">MILLIONS</a>
+  <div class="logo">MILLIONS</div>
+
   <nav>
-    <a href="#">ARCHIVE</a>
     <a href="#">ABOUT</a>
     <a href="#">♥</a>
   </nav>
 </header>
 
-<div class="intro">
-  <span>THE MILLIONS ARCHIVE</span>
-  <span>AN ONGOING COLLECTION</span>
-</div>
-
 <main class="archive" id="archive"></main>
 
+<div class="viewer" id="viewer">
+  <img id="viewerImage" src="" alt="">
+</div>
+
 <footer>
-  MILLIONS — ENDLESS ARCHIVE
-  <br><br>
   IN CASE OF EMERGENCIES...
 </footer>
 
-<div id="viewer" onclick="this.style.display='none'">
-  <img id="large-image" src="" alt="">
-</div>
-
 <script>
-
-// ADD NEW PHOTOGRAPHS AT THE TOP
-
 const images = [
   { file: "image001.jpg", caption: "" },
   { file: "image002.jpg", caption: "" },
@@ -189,31 +165,34 @@ const images = [
 
 const archive = document.getElementById("archive");
 
-images.forEach(item => {
-  const post = document.createElement("div");
-  post.className = "post";
+images.forEach(photo => {
+  const item = document.createElement("div");
+  item.className = "photo";
 
   const img = document.createElement("img");
-  img.src = "images/" + item.file;
-  img.alt = item.caption || "MILLIONS archive photograph";
+  img.src = "images/" + photo.file;
+  img.alt = "MILLIONS photograph";
 
-  img.onclick = () => {
-    document.getElementById("large-image").src = img.src;
-    document.getElementById("viewer").style.display = "flex";
-  };
+  img.addEventListener("click", () => {
+    document.getElementById("viewerImage").src = img.src;
+    document.getElementById("viewer").classList.add("active");
+  });
 
-  post.appendChild(img);
+  item.appendChild(img);
 
-  if (item.caption) {
+  if (photo.caption) {
     const caption = document.createElement("div");
     caption.className = "caption";
-    caption.textContent = item.caption;
-    post.appendChild(caption);
+    caption.textContent = photo.caption;
+    item.appendChild(caption);
   }
 
-  archive.appendChild(post);
+  archive.appendChild(item);
 });
 
+document.getElementById("viewer").addEventListener("click", () => {
+  document.getElementById("viewer").classList.remove("active");
+});
 </script>
 
 </body>
