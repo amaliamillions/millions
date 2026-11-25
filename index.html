@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MILLIONS — ARCHIVE</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #190008;
+  color: #003cff;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 13px;
+}
+
+header {
+  padding: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #003cff;
+  position: sticky;
+  top: 0;
+  background: #190008;
+  z-index: 100;
+}
+
+header a {
+  color: #003cff;
+  text-decoration: none;
+}
+
+.logo {
+  font-size: 22px;
+  letter-spacing: -1px;
+  font-weight: bold;
+}
+
+nav {
+  display: flex;
+  gap: 18px;
+}
+
+.intro {
+  padding: 14px 18px;
+  border-bottom: 1px solid #003cff;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+a {
+  color: #003cff;
+}
+
+.archive {
+  padding: 16px 12px;
+  columns: 3 220px;
+  column-gap: 12px;
+}
+
+.post {
+  break-inside: avoid;
+  position: relative;
+  margin: 0 0 15px;
+  padding: 3px;
+  display: inline-block;
+  width: 100%;
+}
+
+.post:nth-child(5n+1) {
+  transform: rotate(-1deg);
+}
+
+.post:nth-child(5n+2) {
+  transform: rotate(0.7deg);
+  margin-bottom: 3px;
+}
+
+.post:nth-child(5n+3) {
+  transform: rotate(-0.4deg);
+}
+
+.post:nth-child(7n+1) {
+  width: 88%;
+  margin-left: 6%;
+}
+
+.post img {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: zoom-in;
+}
+
+.post img:hover {
+  outline: 1px solid #003cff;
+}
+
+.caption {
+  font-size: 10px;
+  padding-top: 4px;
+}
+
+footer {
+  border-top: 1px solid #003cff;
+  padding: 20px;
+  text-align: center;
+  margin-top: 30px;
+}
+
+/* IMAGE ENLARGEMENT */
+
+#viewer {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.94);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  cursor: zoom-out;
+}
+
+#viewer img {
+  max-width: 95%;
+  max-height: 90vh;
+  object-fit: contain;
+}
+
+@media (max-width: 600px) {
+  .archive {
+    columns: 2 130px;
+    column-gap: 6px;
+    padding: 8px;
+  }
+
+  header {
+    padding: 12px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <a class="logo" href="#">MILLIONS</a>
+  <nav>
+    <a href="#">ARCHIVE</a>
+    <a href="#">ABOUT</a>
+    <a href="#">♥</a>
+  </nav>
+</header>
+
+<div class="intro">
+  <span>THE MILLIONS ARCHIVE</span>
+  <span>AN ONGOING COLLECTION</span>
+</div>
+
+<main class="archive" id="archive"></main>
+
+<footer>
+  MILLIONS — ENDLESS ARCHIVE
+  <br><br>
+  IN CASE OF EMERGENCIES...
+</footer>
+
+<div id="viewer" onclick="this.style.display='none'">
+  <img id="large-image" src="" alt="">
+</div>
+
+<script>
+
+// ADD NEW PHOTOGRAPHS AT THE TOP
+
+const images = [
+  { file: "image001.jpg", caption: "" },
+  { file: "image002.jpg", caption: "" },
+  { file: "image003.jpg", caption: "" }
+];
+
+const archive = document.getElementById("archive");
+
+images.forEach(item => {
+  const post = document.createElement("div");
+  post.className = "post";
+
+  const img = document.createElement("img");
+  img.src = "images/" + item.file;
+  img.alt = item.caption || "MILLIONS archive photograph";
+
+  img.onclick = () => {
+    document.getElementById("large-image").src = img.src;
+    document.getElementById("viewer").style.display = "flex";
+  };
+
+  post.appendChild(img);
+
+  if (item.caption) {
+    const caption = document.createElement("div");
+    caption.className = "caption";
+    caption.textContent = item.caption;
+    post.appendChild(caption);
+  }
+
+  archive.appendChild(post);
+});
+
+</script>
+
+</body>
+</html>
